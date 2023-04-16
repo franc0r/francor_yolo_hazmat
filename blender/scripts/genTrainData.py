@@ -15,11 +15,11 @@ outPath="G:\\YoloHazmat\\francor_yolo_hazmat\\blender\\out\\"
 numHazmats = 4
 
 # Config num scenes and cam positions
-numScenes = 10
-numCamPositions = 10
+numScenes = 2000
+numCamPositions = 5
 
 hazmatList = [
-    ("NON-FLAMMABLE GAS", "2.png"),
+    ("NON-FLAMMABLE_GAS", "2.png"),
     ("FLAMMABLE_LIQUID", "4.png"),
     ("FLAMMABLE_SOLID_1", "5.png"),
     ("OXIDIZER", "6.png"),
@@ -44,6 +44,21 @@ hazmatList = [
     ("DANGEROUS_WHEN_WET_2", "101.png"),
     ("SPONTANEOUSLY_COMBUSTIBLE", "102.png"),
     ("DANGEROUS_WHEN_WET_3", "103.png"),
+    ("EXPLOSIVE_4", "200.png"),
+    ("BLASTING_AGENTS", "201.png"),
+    ("FLAMMABLE_GAS", "202.png"),
+    ("NON-FLAMMABLE_GAS_2", "203.png"),
+    ("OXYGEN", "204.png"),
+    ("FUEL_OIL", "205.png"),
+    ("DANGEROUS_WHEN_WET_4", "206.png"),
+    ("FLAMMABLE_SOLID_3", "207.png"),
+    ("SPONTANEOUSLY_COMBUSTIBLE", "208.png"),
+    ("OXIDIZER_2", "209.png"),
+    ("ORGANIC_PEROXIDE_2", "210.png"),
+    ("IHALATION_HAZARD", "211.png"),
+    ("POISON", "212.png"),
+    ("RADIOACTIVE", "213.png"),
+    ("CORROSIVE", "214.png"),
 ]
 
 def addBackground():
