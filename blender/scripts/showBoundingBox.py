@@ -7,7 +7,7 @@
 import cv2 as cv
 
 imgID    = 0
-filePath = '../out/'
+filePath = 'G:\\YoloHazmat\\francor_yolo_hazmat\\blender\\out\\'
 
 hazmatList = [
     ("NON-FLAMMABLE GAS", "2.png"),

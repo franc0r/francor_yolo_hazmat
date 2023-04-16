@@ -8,20 +8,15 @@ import numpy as np
 from math import radians
 from mathutils import Matrix
 
-#https://blog.paperspace.com/train-yolov5-custom-data/
-
-imagePath="G:\\YoloHazmat\\Hazmat_TrainData\\hazmat_textures\\"
-outPath="G:\\YoloHazmat\\Hazmat_TrainData\\out\\"
-
-#imagePath="/home/martin/Dokumente/FRANCOR/Blender/Hazmat_TrainData/hazmat_textures/"
-#outPath="/home/martin/Dokumente/FRANCOR/Blender/Hazmat_TrainData/out/"
+imagePath="G:\\YoloHazmat\\francor_yolo_hazmat\\blender\\hazmat_textures\\"
+outPath="G:\\YoloHazmat\\francor_yolo_hazmat\\blender\\out\\"
 
 # Num of Hazmats do not edit
 numHazmats = 4
 
 # Config num scenes and cam positions
-numScenes = 16
-numCamPositions = 8
+numScenes = 10
+numCamPositions = 10
 
 hazmatList = [
     ("NON-FLAMMABLE GAS", "2.png"),
