@@ -61,7 +61,7 @@ hazmatList = [
     ("CORROSIVE", "214.png"),
 ]
 
-def addBackground():
+def addBackground():    
     bpy.ops.mesh.primitive_plane_add(size=100.0, location=(0.0, 0.01, 0.0), rotation=(math.radians(90), 0, 0))
     bpy.context.active_object.name = 'BackgroundPlane'
 
