@@ -58,6 +58,7 @@ hazmatList = [
     ("CORROSIVE", "214.png", 1),
 ]
 
+
 class BlenderHandler:
     '''Blender handler class for blender functions'''
     def __init__(self):
@@ -190,7 +191,7 @@ class BlenderHandler:
 
     
 class TrainScene:
-    def __init__(self, blender):
+    def __init__(self, blender, scene_cnt):
         ''' Create new train scene '''
         self._blender = blender
         self._path = os.path.dirname(os.path.realpath(__file__))
@@ -198,7 +199,7 @@ class TrainScene:
         self._output_path = self._path + os.sep + '..' + os.sep + 'output' + os.sep
         self._hazmat_lst = []
         self._num_hazmats = random.randint(1, 4)
-        self._scene_cnt = 0
+        self._scene_cnt = scene_cnt
 
     def add_background(self, name, texture_filename):
         '''Add background'''
@@ -258,6 +259,31 @@ class TrainScene:
         filename = self._output_path + "%d.jpg" % (self._scene_cnt)
         self._scene_cnt += 1
         self._blender.render_scene(filename)
+    
+    def save_descriptor(self):
+        '''Get hazmat description'''
+        descTxt = ""
+
+        for idx in range(0, self._num_hazmats):
+            hazmatName = self._hazmat_lst[idx][0] + self._hazmat_lst[idx][1]
+            classIdx = self.get_class_idx(self._hazmat_lst[idx][0])
+            boundingBox = self._getBoundingBoxDesc(classIdx, hazmatName)
+            descTxt = descTxt + boundingBox
+
+        # Write descriptor file
+        text_file = open(self._output_path + "%d.txt" % (self._scene_cnt - 1), "w")
+        text_file.truncate(0)
+        text_file.write(descTxt)
+        text_file.close()
+
+    def get_class_idx(self, hazmat_name):
+        '''Get class index'''
+        print("Searching for hazmat: " + str(hazmat_name))
+        for hazmat_idx in range(len(hazmatList)):
+            if hazmat_name == hazmatList[hazmat_idx][0]:
+                return hazmat_idx
+
+        return None
 
     def _create_random_pos(self, min_distance, max_distance):
         distance = random.uniform(min_distance, max_distance)
@@ -270,6 +296,10 @@ class TrainScene:
         camRot = rotation=(math.radians(90-xAngleDeg), 0, math.radians(zAngleDeg))
 
         return camPos, camRot
+    
+    def cleanup_scene(self):
+        '''Cleanup scene'''
+        self._blender.delete_all_elements()
     
     def _create_random_hazmats(self):
         '''Create random hazmats'''
@@ -294,11 +324,103 @@ class TrainScene:
         for idx in hazmatIdxLst:
             self._hazmat_lst.append(hazmatList[idx])
 
-    def cleanup_scene(self):
-        '''Cleanup scene'''
-        self._blender.delete_all_elements()
+    def _getBoundingBoxDesc(self, classIdx, hazmatName):
+        bBoxCords = self._findBoundingBox(classIdx, hazmatName)
+        
+        # Bpy get render resolution
+        resX = bpy.context.scene.render.resolution_x
+        resY = bpy.context.scene.render.resolution_y
+
+        if bBoxCords:
+            return self._formatCoordinates(classIdx, bBoxCords, resX, resY)
+
+        return None
+
+    def _findBoundingBox(self, classIdx, hazmatName):    
+        meshObj  = bpy.context.scene.objects.get(hazmatName)
+        camObj   = bpy.context.scene.objects.get('Camera')
+        sceneObj = bpy.data.scenes['Scene']
+
+        """ Get the inverse transformation matrix. """
+        matrix = camObj.matrix_world.normalized().inverted()
+        """ Create a new mesh data block, using the inverse transform matrix to undo any transformations. """
+        mesh = meshObj.to_mesh(preserve_all_data_layers=True)
+        mesh.transform(meshObj.matrix_world)
+        mesh.transform(matrix)
+
+        """ Get the world coordinates for the camera frame bounding box, before any transformations. """
+        frame = [-v for v in camObj.data.view_frame(scene=sceneObj)[:3]]
+
+        lx = []
+        ly = []
+
+        for v in mesh.vertices:
+            co_local = v.co
+            z = -co_local.z
+
+            if z <= 0.0:
+                """ Vertex is behind the camera; ignore it. """
+                continue
+            else:
+                """ Perspective division """
+                frame = [(v / (v.z / z)) for v in frame]
+
+            min_x, max_x = frame[1].x, frame[2].x
+            min_y, max_y = frame[0].y, frame[1].y
+
+            x = (co_local.x - min_x) / (max_x - min_x)
+            y = (co_local.y - min_y) / (max_y - min_y)
+
+            lx.append(x)
+            ly.append(y)
 
 
+        """ Image is not in view if all the mesh verts were ignored """
+        if not lx or not ly:
+            return None
+
+        min_x = np.clip(min(lx), 0.0, 1.0)
+        min_y = np.clip(min(ly), 0.0, 1.0)
+        max_x = np.clip(max(lx), 0.0, 1.0)
+        max_y = np.clip(max(ly), 0.0, 1.0)
+
+        """ Image is not in view if both bounding points exist on the same side """
+        if min_x == max_x or min_y == max_y:
+            return None
+
+        """ Figure out the rendered image size """
+        render = bpy.context.scene.render
+        fac = render.resolution_percentage * 0.01
+        dim_x = render.resolution_x * fac
+        dim_y = render.resolution_y * fac
+        
+        ## Verify there's no coordinates equal to zero
+        coord_list = [min_x, min_y, max_x, max_y]
+        if min(coord_list) == 0.0:
+            indexmin = coord_list.index(min(coord_list))
+            coord_list[indexmin] = coord_list[indexmin] + 0.0000001
+
+        return (min_x, min_y), (max_x, max_y)
+
+
+    def _formatCoordinates(self, classIdx, coordinates, resX, resY):
+        if coordinates:
+                x1 = (coordinates[0][0]) * 1
+                x2 = (coordinates[1][0]) * 1
+                y1 = (1-coordinates[1][1]) * 1
+                y2 = (1-coordinates[0][1]) * 1
+
+                # Calculate width and height
+                width = x2 - x1
+                height = y2 - y1
+
+                # Calculate center point
+                xCenter = x1 + (width / 2)
+                yCenter = y1 + (height / 2)
+
+                return str("%i %.5f %.5f %.5f %.5f \n" % (classIdx, xCenter, yCenter, width, height))
+
+        return None
 
 # Main
 if __name__ == "__main__":
@@ -306,17 +428,19 @@ if __name__ == "__main__":
     path = os.path.dirname(os.path.realpath(__file__))
     print("Path: " + path)
 
+    numImages = 10
+
     blender = BlenderHandler()
-    train_scene = TrainScene(blender)
-    train_scene.cleanup_scene()
-
-    train_scene.add_background('BackgroundPlane', 'wood_texture_01.jpg')
-    train_scene.add_light()
-    train_scene.add_camera()
-    train_scene.add_hazmats()
-    train_scene.render()
-
     
+    for i in range(numImages):
+        train_scene = TrainScene(blender, scene_cnt=i)
+        train_scene.cleanup_scene()
+        train_scene.add_background('BackgroundPlane', 'wood_texture_01.jpg')
+        train_scene.add_light()
+        train_scene.add_camera()
+        train_scene.add_hazmats()
+        train_scene.render()
+        train_scene.save_descriptor()
 
     # Print blender object names
     for obj in bpy.data.objects:

@@ -5,9 +5,10 @@
 # Path: showBoundingBox.py
 
 import cv2 as cv
+import os
 
-imgID    = 0
-filePath = 'G:\\YoloHazmat\\francor_yolo_hazmat\\blender\\out\\'
+imgID    = 4
+filePath = '/home/martin/Projekte/francor/HazmatWS/francor_yolo_hazmat/blender/output/'
 
 hazmatList = [
     ("NON-FLAMMABLE GAS", "2.png"),
@@ -56,7 +57,7 @@ hazmatList = [
 filename = filePath + str(imgID)
 
 # Open image
-img = cv.imread(filename + '.jpg')
+img = cv.imread(filename + '.png')
 
 # Get image resolution
 imgHeight, imgWidth, channels = img.shape
