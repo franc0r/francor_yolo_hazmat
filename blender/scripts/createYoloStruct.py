@@ -43,7 +43,7 @@ descLst = []
 
 # Get all .jpg files and store them in a list
 for file in files:
-    if file.endswith(".jpg"):
+    if file.endswith(".png"):
         imgLst.append(file)
 
 # Calculate number of images for train, valid and test set
