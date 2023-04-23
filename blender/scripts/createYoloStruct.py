@@ -4,7 +4,7 @@
 import os
 import shutil
 
-blenderDataPath     = "G:\\YoloHazmat\\francor_yolo_hazmat\\blender\\out"
+blenderDataPath     = "G:\\YoloHazmat\\francor_yolo_hazmat\\blender\\output"
 yoloDataPath        = "G:\\YoloHazmat\\francor_yolo_hazmat\\blender\\yoloDataset"
 
 trainDataPercentage = 0.8

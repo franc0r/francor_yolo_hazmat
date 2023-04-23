@@ -14,6 +14,7 @@ import mathutils
 import os
 import random
 import numpy as np
+import cv2 as cv
 
 hazmatList = [
     ("NON-FLAMMABLE_GAS", "2.png", 0),
@@ -64,6 +65,10 @@ class BlenderHandler:
     def __init__(self):
         # Set scene background to black
         bpy.context.scene.world.node_tree.nodes["Background"].inputs[0].default_value = (0.0, 0.0, 0.0, 1.0)
+
+        # Change render resolution to 800 x 600
+        bpy.context.scene.render.resolution_x = 640
+        bpy.context.scene.render.resolution_y = 640
 
     def add_plane(self, name, size, location, rotation):
         '''Add plane'''
@@ -256,9 +261,14 @@ class TrainScene:
 
     def render(self):
         '''Render scene'''
-        filename = self._output_path + "%d.jpg" % (self._scene_cnt)
+        filename = self._output_path + "%d.png" % (self._scene_cnt)
         self._scene_cnt += 1
         self._blender.render_scene(filename)
+
+        # Convert to greyscale
+        img = cv.imread(filename)
+        img = cv.cvtColor(img, cv.COLOR_BGR2GRAY)
+        cv.imwrite(filename, img)
     
     def save_descriptor(self):
         '''Get hazmat description'''
@@ -278,7 +288,6 @@ class TrainScene:
 
     def get_class_idx(self, hazmat_name):
         '''Get class index'''
-        print("Searching for hazmat: " + str(hazmat_name))
         for hazmat_idx in range(len(hazmatList)):
             if hazmat_name == hazmatList[hazmat_idx][0]:
                 return hazmat_idx
@@ -428,7 +437,7 @@ if __name__ == "__main__":
     path = os.path.dirname(os.path.realpath(__file__))
     print("Path: " + path)
 
-    numImages = 10
+    numImages = 2
 
     blender = BlenderHandler()
     
@@ -442,6 +451,4 @@ if __name__ == "__main__":
         train_scene.render()
         train_scene.save_descriptor()
 
-    # Print blender object names
-    for obj in bpy.data.objects:
-        print(obj.name)
+        print("Images %i/%i" % (i+1, numImages))
