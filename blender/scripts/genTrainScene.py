@@ -17,6 +17,7 @@ import numpy as np
 import cv2 as cv
 
 objectList = [
+    ("THERMAL_C_AREA", "0.png", 0, 0),
     ("NON-FLAMMABLE_GAS", "2.png", 0, 0),
     ("FLAMMABLE_LIQUID", "4.png", 0, 0),
     ("FLAMMABLE_SOLID_1", "5.png", 0, 0),

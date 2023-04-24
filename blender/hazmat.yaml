@@ -5,6 +5,7 @@ test: images/test
 
 nc: 39
 names: [
+"THERMAL_C_AREA",
 "NON-FLAMMABLE_GAS",
 "FLAMMABLE_LIQUID",
 "FLAMMABLE_SOLID_1",
