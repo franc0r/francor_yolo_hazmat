@@ -59,6 +59,12 @@ hazmatList = [
     ("CORROSIVE", "214.png", 1),
 ]
 
+backgroundImgLst = [
+    ("backgrounds/wood_texture_01.jpg", 2.0, 10.0, (0.0, 0.0)),
+    ("backgrounds/white.jpg", 2.0, 2.0, (0.0, 0.0)),
+    ("backgrounds/tablet_1.jpg", 5.5, 5.5,  (-1.3, 0.6))
+]
+
 
 class BlenderHandler:
     '''Blender handler class for blender functions'''
@@ -206,14 +212,21 @@ class TrainScene:
         self._num_hazmats = random.randint(1, 4)
         self._scene_cnt = scene_cnt
 
-    def add_background(self, name, texture_filename):
+    def add_background(self):
         '''Add background'''
-        size = 4.0
-        location = (0.0, 0.01, 0.0)
-        rotation = rotation=(math.radians(90), 0, 0)
+        create_bgr = random.randint(0, 1)
+        if create_bgr == 1:
+            name = 'BackgroundPlane'
+            bgr_info = backgroundImgLst[random.randint(0, len(backgroundImgLst) - 1)]
+            bgr_offs = bgr_info[3]
 
-        object = self._blender.add_plane(name, size, location, rotation)
-        self._blender.add_material(object, self._img_path + texture_filename)
+            texture_filename = bgr_info[0]
+            size = random.uniform(bgr_info[1], bgr_info[2])
+            location = (bgr_offs[0], 0.01, bgr_offs[1])
+            rotation = rotation=(math.radians(90), 0, 0)
+
+            object = self._blender.add_plane(name, size, location, rotation)
+            self._blender.add_material(object, self._img_path + texture_filename)
 
     def add_light(self):
         '''Add light'''
@@ -437,14 +450,14 @@ if __name__ == "__main__":
     path = os.path.dirname(os.path.realpath(__file__))
     print("Path: " + path)
 
-    numImages = 2
+    numImages = 20
 
     blender = BlenderHandler()
     
     for i in range(numImages):
         train_scene = TrainScene(blender, scene_cnt=i)
         train_scene.cleanup_scene()
-        train_scene.add_background('BackgroundPlane', 'wood_texture_01.jpg')
+        train_scene.add_background();
         train_scene.add_light()
         train_scene.add_camera()
         train_scene.add_hazmats()
