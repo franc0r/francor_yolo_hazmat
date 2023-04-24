@@ -68,6 +68,12 @@ objectList = [
     ("FIRST_AID_KIT_CROSS", "307.png", 0, 1),
     ("TOXIC_WASTE_BARRELL", "308.png", 0, 1),
     ("VALVE", "309.png", 0, 1),
+    ("BIO_TRASH", "310.png", 0, 1),
+    ("FIRE_EXTINGUISHER_2", "311.png", 0, 1),
+    ("FIRE_EXTINGUISHER_3", "312.png", 0, 1),
+    ("EMERGENCY_ESCAPE", "313.png", 0, 1),
+
+
 ]
 
 backgroundImgLst = [
