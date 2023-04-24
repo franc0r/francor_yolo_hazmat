@@ -520,4 +520,7 @@ if __name__ == "__main__":
         train_scene.render()
         train_scene.save_descriptor()
 
+        print("======================================")
         print("Images %i/%i" % (i+1, numImages))
+        print("======================================")
+
