@@ -57,19 +57,20 @@ objectList = [
     ("POISON", "212.png", 1, 0),
     ("RADIOACTIVE", "213.png", 1, 0),
     ("CORROSIVE", "214.png", 1, 0),
-    ("BARREL", "barrel.png", 0, 1),
-    ("DOORKNOB", "Doorknob.png", 0, 1),
-    ("ELEVATOR_BUTTONS", "elevator_buttons.png", 0, 1),
-    ("FIRE_EXTINGUISHER", "fire_extinguisher.png", 0, 1),
-    ("FIRE_HYDRANT", "fire_hydrant.png", 0, 1),
-    ("FIRE_FLAMES", "fire.png", 0, 1),
-    ("FUSE_BOX", "fuse_box.png", 0, 1),
-    ("FIRST_AID_KIT_CROSS", "medical_equitment_point.png", 0, 1),
-    ("VALVE", "valve.png", 0, 1),
+    ("BARREL", "300.png", 0, 1),
+    ("DOORKNOB", "301.png", 0, 1),
+    ("ELEVATOR_BUTTONS", "302.png", 0, 1),
+    ("FIRE_EXTINGUISHER", "303.png", 0, 1),
+    ("FIRE_HYDRANT", "304.png", 0, 1),
+    ("FIRE_FLAMES", "305.png", 0, 1),
+    ("FUSE_BOX", "306.png", 0, 1),
+    ("FIRST_AID_KIT_CROSS", "307.png", 0, 1),
+    ("TOXIC_WASTE_BARRELL", "308.png", 0, 1),
+    ("VALVE", "309.png", 0, 1),
 ]
 
 backgroundImgLst = [
-    ("backgrounds/wood_texture_01.jpg", 2.0, 10.0, (0.0, 0.0)),
+    ("backgrounds/wood_texture_01.jpg", 4.0, 20.0, (0.0, 0.0)),
     ("backgrounds/white.jpg", 2.0, 2.0, (0.0, 0.0)),
     ("backgrounds/tablet_1.jpg", 5.5, 5.5,  (-1.3, 0.6))
 ]
@@ -78,18 +79,16 @@ backgroundImgLst = [
 class BlenderHandler:
     '''Blender handler class for blender functions'''
     def __init__(self):
-        # Set scene background to black
-        bpy.context.scene.world.node_tree.nodes["Background"].inputs[0].default_value = (0.0, 0.0, 0.0, 1.0)
-
         # Change render resolution to 800 x 600
         bpy.context.scene.render.resolution_x = 640
         bpy.context.scene.render.resolution_y = 640
 
-    def add_plane(self, name, size, location, rotation):
+    def add_plane(self, name, size, location, rotation, scale=(1.0, 1.0, 1.0)):
         '''Add plane'''
         bpy.ops.object.select_all(action='DESELECT')
-        bpy.ops.mesh.primitive_plane_add(size=size, enter_editmode=False, location=location, rotation=rotation)
+        bpy.ops.mesh.primitive_plane_add(size=size, enter_editmode=False, location=location, rotation=rotation, scale=scale)
         object = bpy.context.active_object
+        object.scale = scale
         object.name = name
 
         return object
@@ -217,12 +216,18 @@ class TrainScene:
         self._path = os.path.dirname(os.path.realpath(__file__))
         self._img_path = self._path +os.sep + '..' + os.sep + 'images' + os.sep
         self._output_path = self._path + os.sep + '..' + os.sep + 'output' + os.sep
-        self._hazmat_lst = []
-        self._num_hazmats = random.randint(1, 4)
+        self._object_lst = []
+        self._num_objects = random.randint(1, 4)
         self._scene_cnt = scene_cnt
 
     def add_background(self):
         '''Add background'''
+        # Set scene background to random
+        r = random.uniform(0.0, 1000.0) / 1000.0
+        g = random.uniform(0.0, 1000.0) / 1000.0
+        b = random.uniform(0.0, 1000.0) / 1000.0
+        bpy.context.scene.world.node_tree.nodes["Background"].inputs[0].default_value = (r, g, b, 1.0)
+
         create_bgr = random.randint(0, 1)
         if create_bgr == 1:
             name = 'BackgroundPlane'
@@ -265,7 +270,7 @@ class TrainScene:
         # Create hazmat list
         self._create_random_hazmats()
 
-        for i in range(self._num_hazmats):
+        for i in range(self._num_objects):
             xPos = int(i % 2) * 1.0 - 0.5
             zPos = int(i / 2) * 1.0 - 0.5
 
@@ -274,12 +279,27 @@ class TrainScene:
             rotY = rotLst[random.randint(0, 3)]
 
             # Get hazmat data
-            hazmat_name = self._hazmat_lst[i][0] + self._hazmat_lst[i][1]
-            hazmat_img = self._hazmat_lst[i][1]
-            alpha_available = self._hazmat_lst[i][2]
+            hazmat_name = self._object_lst[i][0] + self._object_lst[i][1]
+            hazmat_img = self._object_lst[i][1]
+            alpha_available = self._object_lst[i][2]
 
             object = self._blender.add_plane(hazmat_name, 1.0, (xPos, -0.01, zPos), rotation=(math.radians(90), math.radians(rotY), 0.0))
             self._blender.add_material(object, self._img_path + hazmat_img, alpha_available=alpha_available)
+
+    def add_objects(self):
+        '''Add objects'''
+        self._num_objects = 1
+        objInfo = objectList[self._get_object_idx()]
+        self._object_lst.append(objInfo)
+
+        # Create object
+        name = objInfo[0] + objInfo[1]
+        img = objInfo[1]
+        alpha_available = objInfo[2]
+
+        object = self._blender.add_plane(name, 1.0, (0.0, -0.01, 0.0), rotation=(math.radians(90), 0.0, 0.0), scale=(1.0, 1.7, 1.0))
+        self._blender.add_material(object, self._img_path + img, alpha_available=alpha_available)
+
 
     def render(self):
         '''Render scene'''
@@ -296,9 +316,10 @@ class TrainScene:
         '''Get hazmat description'''
         descTxt = ""
 
-        for idx in range(0, self._num_hazmats):
-            hazmatName = self._hazmat_lst[idx][0] + self._hazmat_lst[idx][1]
-            classIdx = self.get_class_idx(self._hazmat_lst[idx][0])
+        for idx in range(0, self._num_objects):
+            hazmatName = self._object_lst[idx][0] + self._object_lst[idx][1]
+            classIdx = self.get_class_idx(self._object_lst[idx][0])
+            print("Name: %s Class-IDX: %d" % (self._object_lst[idx][0], classIdx))
             boundingBox = self._getBoundingBoxDesc(classIdx, hazmatName)
             descTxt = descTxt + boundingBox
 
@@ -336,8 +357,8 @@ class TrainScene:
         '''Create random hazmats'''
 
         # Create list with random hazmat indices
-        hazmatIdxLst = np.ones(self._num_hazmats, int) * -1
-        for idx in range(self._num_hazmats):
+        hazmatIdxLst = np.ones(self._num_objects, int) * -1
+        for idx in range(self._num_objects):
             searchIdx = True
             
             while searchIdx:    
@@ -357,7 +378,7 @@ class TrainScene:
 
 
         for idx in hazmatIdxLst:
-            self._hazmat_lst.append(objectList[idx])
+            self._object_lst.append(objectList[idx])
 
     def _getBoundingBoxDesc(self, classIdx, hazmatName):
         bBoxCords = self._findBoundingBox(classIdx, hazmatName)
@@ -456,6 +477,19 @@ class TrainScene:
                 return str("%i %.5f %.5f %.5f %.5f \n" % (classIdx, xCenter, yCenter, width, height))
 
         return None
+    
+    def _get_object_idx(self):
+        '''Get object index'''
+        searchActv = True
+
+        while searchActv:
+            rndIdx = random.randint(0, len(objectList) - 1)
+            type = objectList[rndIdx][3]
+
+            if type == 1:
+                return rndIdx
+            
+        return None
 
 # Main
 if __name__ == "__main__":
@@ -463,17 +497,24 @@ if __name__ == "__main__":
     path = os.path.dirname(os.path.realpath(__file__))
     print("Path: " + path)
 
-    numImages = 20
+    numImages = 50
 
     blender = BlenderHandler()
     
     for i in range(numImages):
+        train_hazmat = random.randint(0, 1)
+
         train_scene = TrainScene(blender, scene_cnt=i)
         train_scene.cleanup_scene()
         train_scene.add_background();
         train_scene.add_light()
         train_scene.add_camera()
-        train_scene.add_hazmats()
+
+        if train_hazmat == 1:
+            train_scene.add_hazmats()
+        else:
+            train_scene.add_objects()
+
         train_scene.render()
         train_scene.save_descriptor()
 
