@@ -51,7 +51,7 @@ class ImageSubscriber(Node):
             for detection in results.pandas().xyxy[0].itertuples():
                 confidence = detection.confidence
 
-                if confidence < 0.7:
+                if confidence < 0.85:
                     continue
                 
                 class_name = detection.name
@@ -83,26 +83,9 @@ class ImageSubscriber(Node):
         # Convert to greyscale
         cv_image = self.__cv_br.imgmsg_to_cv2(data)
 
-        # Conver to rgb8
-        #cv_image = cv2.cvtColor(cv_image, cv2.COLOR_GRAY2RGB)
-
         # Copy image to self.__cv_image
         with self.__cv_image_lock:
             self.__cv_image = cv_image.copy()
-
-
-        #processed_image = self.model(current_frame)
-        #img = processed_image.ims[0]
-
-        # convert to rgb8 ros msg
-        #detections = self.br.cv2_to_imgmsg(img, encoding="rgb8")
-
-        # pub it back
-        #self.image_publisher.publish(result)
-
-        #results = self.model(cv_image)
-        #self.get_logger().info(str(results.pandas().xyxy[0])) 
-
 
 def main(args=None):
     rclpy.init(args=args)
