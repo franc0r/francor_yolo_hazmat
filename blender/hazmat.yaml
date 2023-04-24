@@ -3,7 +3,7 @@ train: images/train
 val: images/valid
 test: images/test
 
-nc: 39
+nc: 55
 names: [
 "THERMAL_C_AREA",
 "NON-FLAMMABLE_GAS",
