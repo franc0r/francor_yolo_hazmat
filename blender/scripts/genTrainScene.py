@@ -16,47 +16,56 @@ import random
 import numpy as np
 import cv2 as cv
 
-hazmatList = [
-    ("NON-FLAMMABLE_GAS", "2.png", 0),
-    ("FLAMMABLE_LIQUID", "4.png", 0),
-    ("FLAMMABLE_SOLID_1", "5.png", 0),
-    ("OXIDIZER", "6.png", 0),
-    ("RADIOACTIVE_II", "7.png", 0),
-    ("CORROSIVE", "8.png", 0),
-    ("INHALATION_HAZARD_1", "9.png", 0),
-    ("INFECTIOUS_SUBSTANCE", "10.png", 0),
-    ("EXPLOSIVE_1", "11.png", 0),
-    ("COMBUSTIBLE_1", "12.png", 0),
-    ("DANGEROUS_WHEN_WET_1", "13.png", 0),
-    ("ORGANIC_PEROXIDE", "14.png", 0),
-    ("INHALATION_HAZARD_6", "35.png", 0),
-    ("TOXIC", "36.png", 0),
-    ("COMBUSTIBLE_2", "47.png", 0),
-    ("FLAMMABLE", "48.png", 0),
-    ("GASOLINE", "50.png", 0),
-    ("FISSILE", "58.png", 0),
-    ("RADIOACTIVE_I", "59.png", 0),
-    ("EXPLOSIVE_2", "97.png", 0),
-    ("EXPLOSIVE_3", "98.png", 0),
-    ("FLAMMABLE_SOLID_2", "100.png", 0),
-    ("DANGEROUS_WHEN_WET_2", "101.png", 0),
-    ("SPONTANEOUSLY_COMBUSTIBLE", "102.png", 0),
-    ("DANGEROUS_WHEN_WET_3", "103.png", 0),
-    ("EXPLOSIVE_4", "200.png", 1),
-    ("BLASTING_AGENTS", "201.png", 1),
-    ("FLAMMABLE_GAS", "202.png", 1),
-    ("NON-FLAMMABLE_GAS_2", "203.png", 1),
-    ("OXYGEN", "204.png", 1),
-    ("FUEL_OIL", "205.png", 1),
-    ("DANGEROUS_WHEN_WET_4", "206.png", 1),
-    ("FLAMMABLE_SOLID_3", "207.png", 1),
-    ("SPONTANEOUSLY_COMBUSTIBLE", "208.png", 1),
-    ("OXIDIZER_2", "209.png", 1),
-    ("ORGANIC_PEROXIDE_2", "210.png", 1),
-    ("IHALATION_HAZARD", "211.png", 1),
-    ("POISON", "212.png", 1),
-    ("RADIOACTIVE", "213.png", 1),
-    ("CORROSIVE", "214.png", 1),
+objectList = [
+    ("NON-FLAMMABLE_GAS", "2.png", 0, 0),
+    ("FLAMMABLE_LIQUID", "4.png", 0, 0),
+    ("FLAMMABLE_SOLID_1", "5.png", 0, 0),
+    ("OXIDIZER", "6.png", 0, 0),
+    ("RADIOACTIVE_II", "7.png", 0, 0),
+    ("CORROSIVE", "8.png", 0, 0),
+    ("INHALATION_HAZARD_1", "9.png", 0, 0),
+    ("INFECTIOUS_SUBSTANCE", "10.png", 0, 0),
+    ("EXPLOSIVE_1", "11.png", 0, 0),
+    ("COMBUSTIBLE_1", "12.png", 0, 0),
+    ("DANGEROUS_WHEN_WET_1", "13.png", 0, 0),
+    ("ORGANIC_PEROXIDE", "14.png", 0, 0),
+    ("INHALATION_HAZARD_6", "35.png", 0, 0),
+    ("TOXIC", "36.png", 0, 0),
+    ("COMBUSTIBLE_2", "47.png", 0, 0),
+    ("FLAMMABLE", "48.png", 0, 0),
+    ("GASOLINE", "50.png", 0, 0),
+    ("FISSILE", "58.png", 0, 0),
+    ("RADIOACTIVE_I", "59.png", 0, 0),
+    ("EXPLOSIVE_2", "97.png", 0, 0),
+    ("EXPLOSIVE_3", "98.png", 0, 0),
+    ("FLAMMABLE_SOLID_2", "100.png", 0, 0),
+    ("DANGEROUS_WHEN_WET_2", "101.png", 0, 0),
+    ("SPONTANEOUSLY_COMBUSTIBLE", "102.png", 0, 0),
+    ("DANGEROUS_WHEN_WET_3", "103.png", 0, 0),
+    ("EXPLOSIVE_4", "200.png", 1, 0),
+    ("BLASTING_AGENTS", "201.png", 1, 0),
+    ("FLAMMABLE_GAS", "202.png", 1, 0),
+    ("NON-FLAMMABLE_GAS_2", "203.png", 1, 0),
+    ("OXYGEN", "204.png", 1, 0),
+    ("FUEL_OIL", "205.png", 1, 0),
+    ("DANGEROUS_WHEN_WET_4", "206.png", 1, 0),
+    ("FLAMMABLE_SOLID_3", "207.png", 1, 0),
+    ("SPONTANEOUSLY_COMBUSTIBLE", "208.png", 1, 0),
+    ("OXIDIZER_2", "209.png", 1, 0),
+    ("ORGANIC_PEROXIDE_2", "210.png", 1, 0),
+    ("IHALATION_HAZARD", "211.png", 1, 0),
+    ("POISON", "212.png", 1, 0),
+    ("RADIOACTIVE", "213.png", 1, 0),
+    ("CORROSIVE", "214.png", 1, 0),
+    ("BARREL", "barrel.png", 0, 1),
+    ("DOORKNOB", "Doorknob.png", 0, 1),
+    ("ELEVATOR_BUTTONS", "elevator_buttons.png", 0, 1),
+    ("FIRE_EXTINGUISHER", "fire_extinguisher.png", 0, 1),
+    ("FIRE_HYDRANT", "fire_hydrant.png", 0, 1),
+    ("FIRE_FLAMES", "fire.png", 0, 1),
+    ("FUSE_BOX", "fuse_box.png", 0, 1),
+    ("FIRST_AID_KIT_CROSS", "medical_equitment_point.png", 0, 1),
+    ("VALVE", "valve.png", 0, 1),
 ]
 
 backgroundImgLst = [
@@ -301,8 +310,8 @@ class TrainScene:
 
     def get_class_idx(self, hazmat_name):
         '''Get class index'''
-        for hazmat_idx in range(len(hazmatList)):
-            if hazmat_name == hazmatList[hazmat_idx][0]:
+        for hazmat_idx in range(len(objectList)):
+            if hazmat_name == objectList[hazmat_idx][0]:
                 return hazmat_idx
 
         return None
@@ -333,18 +342,22 @@ class TrainScene:
             
             while searchIdx:    
                 # Add random data to array
-                rndIdx = random.randint(0, len(hazmatList) - 1)
-                
-                if rndIdx in hazmatIdxLst:
-                    searchIdx = True
-                    break
+                rndIdx = random.randint(0, len(objectList) - 1)
+                type = objectList[rndIdx][3]
+
+                if type == 0:
+                    if rndIdx in hazmatIdxLst:
+                        searchIdx = True
+                        break
+                    else:
+                        hazmatIdxLst[idx] = rndIdx
+                        searchIdx = False
                 else:
-                    hazmatIdxLst[idx] = rndIdx
-                    searchIdx = False
+                    searchIdx = True
 
 
         for idx in hazmatIdxLst:
-            self._hazmat_lst.append(hazmatList[idx])
+            self._hazmat_lst.append(objectList[idx])
 
     def _getBoundingBoxDesc(self, classIdx, hazmatName):
         bBoxCords = self._findBoundingBox(classIdx, hazmatName)
