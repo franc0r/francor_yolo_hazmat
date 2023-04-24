@@ -72,7 +72,8 @@ objectList = [
 backgroundImgLst = [
     ("backgrounds/wood_texture_01.jpg", 4.0, 20.0, (0.0, 0.0)),
     ("backgrounds/white.jpg", 2.0, 2.0, (0.0, 0.0)),
-    ("backgrounds/tablet_1.jpg", 5.5, 5.5,  (-1.3, 0.6))
+    ("backgrounds/tablet_1.jpg", 5.5, 5.5,  (-1.3, 0.6)),
+    ("backgrounds/concrete01.jpg", 4.0, 20.0, (0.0, 0.0)),
 ]
 
 
