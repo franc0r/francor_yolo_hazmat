@@ -16,64 +16,63 @@ import random
 import numpy as np
 import cv2 as cv
 
+# Class-Name, Image-Name, Alpha-Available, Category, White-Background
 objectList = [
-    ("THERMAL_C_AREA", "0.png", 0, 0),
-    ("NON-FLAMMABLE_GAS", "2.png", 0, 0),
-    ("FLAMMABLE_LIQUID", "4.png", 0, 0),
-    ("FLAMMABLE_SOLID_1", "5.png", 0, 0),
-    ("OXIDIZER", "6.png", 0, 0),
-    ("RADIOACTIVE_II", "7.png", 0, 0),
-    ("CORROSIVE", "8.png", 0, 0),
-    ("INHALATION_HAZARD_1", "9.png", 0, 0),
-    ("INFECTIOUS_SUBSTANCE", "10.png", 0, 0),
-    ("EXPLOSIVE_1", "11.png", 0, 0),
-    ("COMBUSTIBLE_1", "12.png", 0, 0),
-    ("DANGEROUS_WHEN_WET_1", "13.png", 0, 0),
-    ("ORGANIC_PEROXIDE", "14.png", 0, 0),
-    ("INHALATION_HAZARD_6", "35.png", 0, 0),
-    ("TOXIC", "36.png", 0, 0),
-    ("COMBUSTIBLE_2", "47.png", 0, 0),
-    ("FLAMMABLE", "48.png", 0, 0),
-    ("GASOLINE", "50.png", 0, 0),
-    ("FISSILE", "58.png", 0, 0),
-    ("RADIOACTIVE_I", "59.png", 0, 0),
-    ("EXPLOSIVE_2", "97.png", 0, 0),
-    ("EXPLOSIVE_3", "98.png", 0, 0),
-    ("FLAMMABLE_SOLID_2", "100.png", 0, 0),
-    ("DANGEROUS_WHEN_WET_2", "101.png", 0, 0),
-    ("SPONTANEOUSLY_COMBUSTIBLE", "102.png", 0, 0),
-    ("DANGEROUS_WHEN_WET_3", "103.png", 0, 0),
-    ("EXPLOSIVE_4", "200.png", 1, 0),
-    ("BLASTING_AGENTS", "201.png", 1, 0),
-    ("FLAMMABLE_GAS", "202.png", 1, 0),
-    ("NON-FLAMMABLE_GAS_2", "203.png", 1, 0),
-    ("OXYGEN", "204.png", 1, 0),
-    ("FUEL_OIL", "205.png", 1, 0),
-    ("DANGEROUS_WHEN_WET_4", "206.png", 1, 0),
-    ("FLAMMABLE_SOLID_3", "207.png", 1, 0),
-    ("SPONTANEOUSLY_COMBUSTIBLE", "208.png", 1, 0),
-    ("OXIDIZER_2", "209.png", 1, 0),
-    ("ORGANIC_PEROXIDE_2", "210.png", 1, 0),
-    ("IHALATION_HAZARD", "211.png", 1, 0),
-    ("POISON", "212.png", 1, 0),
-    ("RADIOACTIVE", "213.png", 1, 0),
-    ("CORROSIVE", "214.png", 1, 0),
-    ("BARREL", "300.png", 0, 1),
-    ("DOORKNOB", "301.png", 0, 1),
-    ("ELEVATOR_BUTTONS", "302.png", 0, 1),
-    ("FIRE_EXTINGUISHER", "303.png", 0, 1),
-    ("FIRE_HYDRANT", "304.png", 0, 1),
-    ("FIRE_FLAMES", "305.png", 0, 1),
-    ("FUSE_BOX", "306.png", 0, 1),
-    ("FIRST_AID_KIT_CROSS", "307.png", 0, 1),
-    ("TOXIC_WASTE_BARRELL", "308.png", 0, 1),
-    ("VALVE", "309.png", 0, 1),
-    ("BIO_TRASH", "310.png", 0, 1),
-    ("FIRE_EXTINGUISHER_2", "311.png", 0, 1),
-    ("FIRE_EXTINGUISHER_3", "312.png", 0, 1),
-    ("EMERGENCY_ESCAPE", "313.png", 0, 1),
-
-
+    ("THERMAL_C_AREA", "0.png", 0, 0, 0),
+    ("NON-FLAMMABLE_GAS", "2.png", 0, 0, 0),
+    ("FLAMMABLE_LIQUID", "4.png", 0, 0, 0),
+    ("FLAMMABLE_SOLID-1", "5.png", 0, 0, 0),
+    ("OXIDIZER", "6.png", 0, 0, 0),
+    ("RADIOACTIVE-II", "7.png", 0, 0, 0),
+    ("CORROSIVE", "8.png", 0, 0, 0),
+    ("INHALATION_HAZARD-1", "9.png", 0, 0, 0),
+    ("INFECTIOUS_SUBSTANCE", "10.png", 0, 0, 0),
+    ("EXPLOSIVE-1", "11.png", 0, 0, 0),
+    ("COMBUSTIBLE-1", "12.png", 0, 0, 0),
+    ("DANGEROUS_WHEN_WET-1", "13.png", 0, 0, 0),
+    ("ORGANIC_PEROXIDE", "14.png", 0, 0, 0),
+    ("INHALATION_HAZARD-6", "35.png", 0, 0, 0),
+    ("TOXIC", "36.png", 0, 0, 0),
+    ("COMBUSTIBLE-2", "47.png", 0, 0, 0),
+    ("FLAMMABLE", "48.png", 0, 0, 0),
+    ("GASOLINE", "50.png", 0, 0, 0),
+    ("FISSILE", "58.png", 0, 0, 0),
+    ("RADIOACTIVE_I", "59.png", 0, 0, 0),
+    ("EXPLOSIVE-2", "97.png", 0, 0, 0),
+    ("EXPLOSIVE-3", "98.png", 0, 0, 0),
+    ("FLAMMABLE_SOLID-2", "100.png", 0, 0, 0),
+    ("DANGEROUS_WHEN_WET-2", "101.png", 0, 0, 0),
+    ("SPONTANEOUSLY_COMBUSTIBLE", "102.png", 0, 0, 0),
+    ("DANGEROUS_WHEN_WET-3", "103.png", 0, 0, 0),
+    ("EXPLOSIVE-4", "200.png", 1, 0, 0),
+    ("BLASTING_AGENTS", "201.png", 1, 0, 0),
+    ("FLAMMABLE_GAS", "202.png", 1, 0, 0),
+    ("NON-FLAMMABLE_GAS-2", "203.png", 1, 0, 0),
+    ("OXYGEN", "204.png", 1, 0, 0),
+    ("FUEL_OIL", "205.png", 1, 0, 0),
+    ("DANGEROUS_WHEN_WET-4", "206.png", 1, 0, 0),
+    ("FLAMMABLE_SOLID-3", "207.png", 1, 0, 0),
+    ("SPONTANEOUSLY_COMBUSTIBLE", "208.png", 1, 0, 0),
+    ("OXIDIZER-2", "209.png", 1, 0, 0),
+    ("ORGANIC_PEROXIDE-2", "210.png", 1, 0, 0),
+    ("IHALATION_HAZARD", "211.png", 1, 0, 0),
+    ("POISON", "212.png", 1, 0, 0),
+    ("RADIOACTIVE", "213.png", 1, 0, 0),
+    ("CORROSIVE", "214.png", 1, 0, 0),
+    ("BARREL", "300.png", 0, 1, 1),
+    ("DOORKNOB", "301.png", 0, 1, 1),
+    ("ELEVATOR_BUTTONS", "302.png", 0, 1, 1),
+    ("FIRE_EXTINGUISHER", "303.png", 0, 1, 1),
+    ("FIRE_HYDRANT", "304.png", 0, 1, 1),
+    ("FIRE_FLAMES", "305.png", 0, 1, 1),
+    ("FUSE_BOX", "306.png", 0, 1, 1),
+    ("FIRST_AID_KIT_CROSS", "307.png", 0, 1, 1),
+    ("TOXIC_WASTE_BARRELL", "308.png", 0, 1, 1),
+    ("VALVE", "309.png", 0, 1, 1),
+    ("BIO_TRASH", "310.png", 0, 1, 0),
+    ("FIRE_EXTINGUISHER_2", "311.png", 0, 1, 0),
+    ("FIRE_EXTINGUISHER_3", "312.png", 0, 1, 0),
+    ("EMERGENCY_ESCAPE", "313.png", 0, 1, 0),
 ]
 
 backgroundImgLst = [
@@ -250,6 +249,10 @@ class TrainScene:
             object = self._blender.add_plane(name, size, location, rotation)
             self._blender.add_material(object, self._img_path + texture_filename)
 
+    def add_background_white(self):
+        # Set scene background to random
+        bpy.context.scene.world.node_tree.nodes["Background"].inputs[0].default_value = (1.0, 1.0, 1.0, 1.0)
+
     def add_light(self):
         '''Add light'''
         name = 'Light'
@@ -263,7 +266,7 @@ class TrainScene:
     def add_camera(self):
         '''Add camera'''
         name = 'Camera'
-        camLoc, camRot = self._create_random_pos(4.0, 10.0)
+        camLoc, camRot = self._create_random_pos(1.0, 10.0)
 
         object = self._blender.add_camera(name, location=camLoc, rotation=camRot)
         object.data.lens = 35.0
@@ -304,6 +307,13 @@ class TrainScene:
         name = objInfo[0] + objInfo[1]
         img = objInfo[1]
         alpha_available = objInfo[2]
+        white_background = objInfo[3]
+
+        if white_background:
+            train_scene.cleanup_scene()
+            train_scene.add_background_white();
+            train_scene.add_light()
+            train_scene.add_camera()
 
         object = self._blender.add_plane(name, 1.0, (0.0, -0.01, 0.0), rotation=(math.radians(90), 0.0, 0.0), scale=(1.0, 1.7, 1.0))
         self._blender.add_material(object, self._img_path + img, alpha_available=alpha_available)
@@ -510,7 +520,7 @@ if __name__ == "__main__":
     blender = BlenderHandler()
     
     for i in range(numImages):
-        train_hazmat = random.randint(0, 1)
+        train_hazmat = 0#random.randint(0, 1)
 
         train_scene = TrainScene(blender, scene_cnt=i)
         train_scene.cleanup_scene()

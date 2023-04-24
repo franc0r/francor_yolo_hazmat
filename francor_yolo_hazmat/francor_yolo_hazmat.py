@@ -28,7 +28,7 @@ class ImageSubscriber(Node):
         
         # declare tools
         self.__cv_br = CvBridge()
-        self.__model = torch.hub.load('/home/martin/Projekte/francor/HazmatWS/yolov5', 'custom', path='/home/martin/Projekte/francor/HazmatWS/yolov5/hazmat.pt', source='local') 
+        self.__model = torch.hub.load('/home/martin/Projekte/francor/HazmatWS/yolov5', 'custom', path='/home/martin/Projekte/francor/HazmatWS/yolov5/hazmat_yolov5s.pt', source='local') 
 
         # Image container
         self.__cv_image = None
