@@ -520,7 +520,7 @@ if __name__ == "__main__":
     blender = BlenderHandler()
     
     for i in range(numImages):
-        train_hazmat = 0#random.randint(0, 1)
+        train_hazmat = random.randint(0, 1)
 
         train_scene = TrainScene(blender, scene_cnt=i)
         train_scene.cleanup_scene()
