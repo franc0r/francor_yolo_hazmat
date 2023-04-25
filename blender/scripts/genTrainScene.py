@@ -16,44 +16,49 @@ import random
 import numpy as np
 import cv2 as cv
 
+numScenes = 10
+imgOffset = 0
+
 # Class-Name, Image-Name, Alpha-Available, Category, White-Background
 objectList = [
-    ("SQR_THERML-C",                  "0.png",   0, 0, 0),
-    ("SQR_NON-FLAMMALBLE_GAS",        "1.png",   0, 0, 0),
-    ("SQR_FLAMMABLE_LIQUID",          "2.png",   0, 0, 0),
-    ("SQR_OXIDIZER",                  "3.png",   0, 0, 0),
-    ("SQR_INFECTIOUS_SUBSTANCE",      "4.png",   0, 0, 0),
-    ("SQR_ORGANIC_PEROXIDE",          "5.png",   0, 0, 0),
-    ("SQR_CORROSIVE",                 "6.png",   0, 0, 0),
-    ("SQR_EXPLOSIVE",                 "7.png",   0, 0, 0),
-    ("SQR_FLAMMABLE_SOLID",           "8.png",   0, 0, 0),
-    ("SQR_DANGEROUS_WHEN_WET",        "9.png",   0, 0, 0),
-    ("SQR_SPONTANEOUSLY_COMBUSTIBLE", "10.png",  0, 0, 0),
-    ("SQR_RADIOACTIVE_II",            "11.png",  0, 0, 0),
-    ("SQR_INHALATION_HAZARD",         "12.png",  0, 0, 0),
-    ("RHO_CORROSIVE",                 "100.png", 1, 0, 0),
-    ("RHO_RADIACTIVE",                "101.png", 1, 0, 0),         
-    ("RHO_POISON",                    "102.png", 1, 0, 0),
-    ("RHO_INHALATION_HAZARD",         "103.png", 1, 0, 0),
-    ("RHO_ORGANIC_PEROXIDE",          "104.png", 1, 0, 0),
-    ("RHO_OXIDIZER",                  "105.png", 1, 0, 0),
-    ("RHO_SPONTANEOUSLY_COMBUSTIBLE", "106.png", 1, 0, 0),
-    ("RHO_FLAMMABLE_SOLID",           "107.png", 1, 0, 0),
-    ("RHO_DANGEROUS_WHEN_WET",        "108.png", 1, 0, 0),
-    ("RHO_FUEL_OIL",                  "109.png", 1, 0, 0),
-    ("RHO_OXYGEN",                    "110.png", 1, 0, 0),
-    ("RHO_NON-FLAMMALBLE_GAS",        "111.png", 1, 0, 0),
-    ("RHO_FLAMMABLE_GAS",             "112.png", 1, 0, 0),
-    ("RHO_BLASTING_AGENT",            "113.png", 1, 0, 0),
-    ("RHO_EXPLOSIVE",                 "114.png", 1, 0, 0),
-    ("OBJ_BLUE_BARREL",               "200.png", 0, 1, 0),
-    ("OBJ_WATER_HYDRANT",             "201.png", 0, 1, 0),
-    ("OBJ_GREEN_CROSS",               "202.png", 0, 1, 0),
-    ("OBJ_VALVE",                     "203.png", 0, 1, 0),
-    ("OBJ_ELEVATOR_BUTTONS",          "204.png", 0, 1, 0),
-    ("OBJ_FUSE_BOX",                  "205.png", 0, 1, 0),
-    ("OBJ_FIRE",                      "206.png", 0, 1, 0),
-    ("OBJ_FIRE_EXTINGUISHER",         "207.png", 0, 1, 0),
+    ("SQR_THERML-C",                  "0.png",    0, 0, 0),
+    ("SQR_NON-FLAMMALBLE_GAS",        "1.png",    0, 0, 0),
+    ("SQR_FLAMMABLE_LIQUID",          "2.png",    0, 0, 0),
+    ("SQR_OXIDIZER",                  "3.png",    0, 0, 0),
+    ("SQR_INFECTIOUS_SUBSTANCE",      "4.png",    0, 0, 0),
+    ("SQR_ORGANIC_PEROXIDE",          "5.png",    0, 0, 0),
+    ("SQR_CORROSIVE",                 "6.png",    0, 0, 0),
+    ("SQR_EXPLOSIVE",                 "7.png",    0, 0, 0),
+    ("SQR_FLAMMABLE_SOLID",           "8.png",    0, 0, 0),
+    ("SQR_DANGEROUS_WHEN_WET",        "9.png",    0, 0, 0),
+    ("SQR_SPONTANEOUSLY_COMBUSTIBLE", "10.png",   0, 0, 0),
+    ("SQR_RADIOACTIVE_II",            "11.png",   0, 0, 0),
+    ("SQR_INHALATION_HAZARD",         "12.png",   0, 0, 0),
+    ("RHO_CORROSIVE",                 "100.png",  1, 0, 0),
+    ("RHO_RADIACTIVE",                "101.png",  1, 0, 0),         
+    ("RHO_POISON",                    "102.png",  1, 0, 0),
+    ("RHO_INHALATION_HAZARD",         "103.png",  1, 0, 0),
+    ("RHO_ORGANIC_PEROXIDE",          "104.png",  1, 0, 0),
+    ("RHO_OXIDIZER",                  "105.png",  1, 0, 0),
+    ("RHO_SPONTANEOUSLY_COMBUSTIBLE", "106.png",  1, 0, 0),
+    ("RHO_FLAMMABLE_SOLID",           "107.png",  1, 0, 0),
+    ("RHO_DANGEROUS_WHEN_WET",        "108.png",  1, 0, 0),
+    ("RHO_FUEL_OIL",                  "109.png",  1, 0, 0),
+    ("RHO_OXYGEN",                    "110.png",  1, 0, 0),
+    ("RHO_NON-FLAMMALBLE_GAS",        "111.png",  1, 0, 0),
+    ("RHO_FLAMMABLE_GAS",             "112.png",  1, 0, 0),
+    ("RHO_BLASTING_AGENT",            "113.png",  1, 0, 0),
+    ("RHO_EXPLOSIVE",                 "114.png",  1, 0, 0),
+    ("OBJ_DOOR_HANDLE",               "1000.png", 0, 1, 0),
+    ("OBJ_FIRE_EXTINGUISHER",         "1001.png", 0, 1, 0),
+    ("OBJ_FIRE_FUSE_BOX",             "1002.png", 0, 1, 0),
+    ("OBJ_GREEN_BARELL",              "1003.png", 0, 1, 0),
+    ("OBJ_GREEN_CROSS",               "1004.png", 0, 1, 0),
+    ("OBJ_WATER_HYDRANT",             "1005.png", 0, 1, 0),
+    ("OBJ_BLUE_BARREL",               "1006.png", 0, 1, 0),
+    ("OBJ_ELEVATOR_BUTTONS",          "1007.png", 0, 1, 0),
+    ("OBJ_VALVE",                     "1008.png", 0, 1, 0),
+    ("OBJ_FIRE",                      "1009.png", 0, 1, 0),
 ]
 
 backgroundImgLst = [
@@ -290,19 +295,29 @@ class TrainScene:
         alpha_available = objInfo[2]
         white_background = objInfo[3]
 
+        cv_img = cv.imread(self._img_path + img)
+
+        # Get dimensions
+        height, width, channels = cv_img.shape
+
+        # Calculate scale for x and y
+        ratio = height / width
+        scale_x = 1.0
+        scale_y = 1.0 * (height / width)
+
         #if white_background == 1:
         #    train_scene.cleanup_scene()
         #    train_scene.add_background_white();
         #    train_scene.add_light()
         #    train_scene.add_camera()
 
-        object = self._blender.add_plane(name, 1.0, (0.0, -0.01, 0.0), rotation=(math.radians(90), 0.0, 0.0), scale=(1.0, 1.7, 1.0))
+        object = self._blender.add_plane(name, 2.0, (0.0, -0.01, 0.0), rotation=(math.radians(90), 0.0, 0.0), scale=(scale_x, scale_y, 1.0))
         self._blender.add_material(object, self._img_path + img, alpha_available=alpha_available)
 
 
     def render(self):
         '''Render scene'''
-        filename = self._output_path + "%d.png" % (self._scene_cnt)
+        filename = self._output_path + "%d.png" % (self._scene_cnt + imgOffset)
         self._scene_cnt += 1
         self._blender.render_scene(filename)
 
@@ -323,7 +338,7 @@ class TrainScene:
             descTxt = descTxt + boundingBox
 
         # Write descriptor file
-        text_file = open(self._output_path + "%d.txt" % (self._scene_cnt - 1), "w")
+        text_file = open(self._output_path + "%d.txt" % (self._scene_cnt + imgOffset - 1), "w")
         text_file.truncate(0)
         text_file.write(descTxt)
         text_file.close()
@@ -500,12 +515,11 @@ if __name__ == "__main__":
     print("======================================")
 
 
-    numImages = 1
 
     blender = BlenderHandler()
     
-    for i in range(numImages):
-        train_hazmat = random.randint(0, 1)
+    for i in range(numScenes):
+        train_hazmat = 0#random.randint(0, 1)
 
         train_scene = TrainScene(blender, scene_cnt=i)
         train_scene.cleanup_scene()
@@ -522,6 +536,6 @@ if __name__ == "__main__":
         train_scene.save_descriptor()
 
         print("======================================")
-        print("Images %i/%i" % (i+1, numImages))
+        print("Images %i/%i" % (i+1, numScenes))
         print("======================================")
 
