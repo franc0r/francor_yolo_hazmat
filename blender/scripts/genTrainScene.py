@@ -18,68 +18,49 @@ import cv2 as cv
 
 # Class-Name, Image-Name, Alpha-Available, Category, White-Background
 objectList = [
-    ("THERMAL_C_AREA", "0.png", 0, 0, 0),
-    ("NON-FLAMMABLE_GAS", "2.png", 0, 0, 0),
-    ("FLAMMABLE_LIQUID", "4.png", 0, 0, 0),
-    ("FLAMMABLE_SOLID-1", "5.png", 0, 0, 0),
-    ("OXIDIZER", "6.png", 0, 0, 0),
-    ("RADIOACTIVE-II", "7.png", 0, 0, 0),
-    ("CORROSIVE", "8.png", 0, 0, 0),
-    ("INHALATION_HAZARD-1", "9.png", 0, 0, 0),
-    ("INFECTIOUS_SUBSTANCE", "10.png", 0, 0, 0),
-    ("EXPLOSIVE-1", "11.png", 0, 0, 0),
-    ("COMBUSTIBLE-1", "12.png", 0, 0, 0),
-    ("DANGEROUS_WHEN_WET-1", "13.png", 0, 0, 0),
-    ("ORGANIC_PEROXIDE", "14.png", 0, 0, 0),
-    ("INHALATION_HAZARD-6", "35.png", 0, 0, 0),
-    ("TOXIC", "36.png", 0, 0, 0),
-    ("COMBUSTIBLE-2", "47.png", 0, 0, 0),
-    ("FLAMMABLE", "48.png", 0, 0, 0),
-    ("GASOLINE", "50.png", 0, 0, 0),
-    ("FISSILE", "58.png", 0, 0, 0),
-    ("RADIOACTIVE_I", "59.png", 0, 0, 0),
-    ("EXPLOSIVE-2", "97.png", 0, 0, 0),
-    ("EXPLOSIVE-3", "98.png", 0, 0, 0),
-    ("FLAMMABLE_SOLID-2", "100.png", 0, 0, 0),
-    ("DANGEROUS_WHEN_WET-2", "101.png", 0, 0, 0),
-    ("SPONTANEOUSLY_COMBUSTIBLE", "102.png", 0, 0, 0),
-    ("DANGEROUS_WHEN_WET-3", "103.png", 0, 0, 0),
-    ("EXPLOSIVE-4", "200.png", 1, 0, 0),
-    ("BLASTING_AGENTS", "201.png", 1, 0, 0),
-    ("FLAMMABLE_GAS", "202.png", 1, 0, 0),
-    ("NON-FLAMMABLE_GAS-2", "203.png", 1, 0, 0),
-    ("OXYGEN", "204.png", 1, 0, 0),
-    ("FUEL_OIL", "205.png", 1, 0, 0),
-    ("DANGEROUS_WHEN_WET-4", "206.png", 1, 0, 0),
-    ("FLAMMABLE_SOLID-3", "207.png", 1, 0, 0),
-    ("SPONTANEOUSLY_COMBUSTIBLE", "208.png", 1, 0, 0),
-    ("OXIDIZER-2", "209.png", 1, 0, 0),
-    ("ORGANIC_PEROXIDE-2", "210.png", 1, 0, 0),
-    ("IHALATION_HAZARD", "211.png", 1, 0, 0),
-    ("POISON", "212.png", 1, 0, 0),
-    ("RADIOACTIVE", "213.png", 1, 0, 0),
-    ("CORROSIVE", "214.png", 1, 0, 0),
-    ("BARREL", "300.png", 0, 1, 1),
-    ("DOORKNOB", "301.png", 0, 1, 1),
-    ("ELEVATOR_BUTTONS", "302.png", 0, 1, 1),
-    ("FIRE_EXTINGUISHER", "303.png", 0, 1, 1),
-    ("FIRE_HYDRANT", "304.png", 0, 1, 1),
-    ("FIRE_FLAMES", "305.png", 0, 1, 1),
-    ("FUSE_BOX", "306.png", 0, 1, 1),
-    ("FIRST_AID_KIT_CROSS", "307.png", 0, 1, 1),
-    ("TOXIC_WASTE_BARRELL", "308.png", 0, 1, 1),
-    ("VALVE", "309.png", 0, 1, 1),
-    ("BIO_TRASH", "310.png", 0, 1, 0),
-    ("FIRE_EXTINGUISHER_2", "311.png", 0, 1, 0),
-    ("FIRE_EXTINGUISHER_3", "312.png", 0, 1, 0),
-    ("EMERGENCY_ESCAPE", "313.png", 0, 1, 0),
+    ("SQR_THERML-C",                  "0.png",   0, 0, 0),
+    ("SQR_NON-FLAMMALBLE_GAS",        "1.png",   0, 0, 0),
+    ("SQR_FLAMMABLE_LIQUID",          "2.png",   0, 0, 0),
+    ("SQR_OXIDIZER",                  "3.png",   0, 0, 0),
+    ("SQR_INFECTIOUS_SUBSTANCE",      "4.png",   0, 0, 0),
+    ("SQR_ORGANIC_PEROXIDE",          "5.png",   0, 0, 0),
+    ("SQR_CORROSIVE",                 "6.png",   0, 0, 0),
+    ("SQR_EXPLOSIVE",                 "7.png",   0, 0, 0),
+    ("SQR_FLAMMABLE_SOLID",           "8.png",   0, 0, 0),
+    ("SQR_DANGEROUS_WHEN_WET",        "9.png",   0, 0, 0),
+    ("SQR_SPONTANEOUSLY_COMBUSTIBLE", "10.png",  0, 0, 0),
+    ("SQR_RADIOACTIVE_II",            "11.png",  0, 0, 0),
+    ("SQR_INHALATION_HAZARD",         "12.png",  0, 0, 0),
+    ("RHO_CORROSIVE",                 "100.png", 1, 0, 0),
+    ("RHO_RADIACTIVE",                "101.png", 1, 0, 0),         
+    ("RHO_POISON",                    "102.png", 1, 0, 0),
+    ("RHO_INHALATION_HAZARD",         "103.png", 1, 0, 0),
+    ("RHO_ORGANIC_PEROXIDE",          "104.png", 1, 0, 0),
+    ("RHO_OXIDIZER",                  "105.png", 1, 0, 0),
+    ("RHO_SPONTANEOUSLY_COMBUSTIBLE", "106.png", 1, 0, 0),
+    ("RHO_FLAMMABLE_SOLID",           "107.png", 1, 0, 0),
+    ("RHO_DANGEROUS_WHEN_WET",        "108.png", 1, 0, 0),
+    ("RHO_FUEL_OIL",                  "109.png", 1, 0, 0),
+    ("RHO_OXYGEN",                    "110.png", 1, 0, 0),
+    ("RHO_NON-FLAMMALBLE_GAS",        "111.png", 1, 0, 0),
+    ("RHO_FLAMMABLE_GAS",             "112.png", 1, 0, 0),
+    ("RHO_BLASTING_AGENT",            "113.png", 1, 0, 0),
+    ("RHO_EXPLOSIVE",                 "114.png", 1, 0, 0),
+    ("OBJ_BLUE_BARREL",               "200.png", 0, 1, 0),
+    ("OBJ_WATER_HYDRANT",             "201.png", 0, 1, 0),
+    ("OBJ_GREEN_CROSS",               "202.png", 0, 1, 0),
+    ("OBJ_VALVE",                     "203.png", 0, 1, 0),
+    ("OBJ_ELEVATOR_BUTTONS",          "204.png", 0, 1, 0),
+    ("OBJ_FUSE_BOX",                  "205.png", 0, 1, 0),
+    ("OBJ_FIRE",                      "206.png", 0, 1, 0),
+    ("OBJ_FIRE_EXTINGUISHER",         "207.png", 0, 1, 0),
 ]
 
 backgroundImgLst = [
-    ("backgrounds/wood_texture_01.jpg", 4.0, 20.0, (0.0, 0.0)),
-    ("backgrounds/white.jpg", 2.0, 2.0, (0.0, 0.0)),
-    ("backgrounds/tablet_1.jpg", 5.5, 5.5,  (-1.3, 0.6)),
-    ("backgrounds/concrete01.jpg", 4.0, 20.0, (0.0, 0.0)),
+    ("backgrounds/wood_texture_01.jpg", 12.0, 12.0, (0.0, 0.0)),
+    #("backgrounds/white.jpg", 2.0, 2.0, (0.0, 0.0)),
+    #("backgrounds/tablet_1.jpg", 5.5, 5.5,  (-1.3, 0.6)),
+    #("backgrounds/concrete01.jpg", 4.0, 20.0, (0.0, 0.0)),
 ]
 
 
@@ -230,12 +211,12 @@ class TrainScene:
     def add_background(self):
         '''Add background'''
         # Set scene background to random
-        r = random.uniform(0.0, 1000.0) / 1000.0
-        g = random.uniform(0.0, 1000.0) / 1000.0
-        b = random.uniform(0.0, 1000.0) / 1000.0
+        r = 1.0#random.uniform(0.0, 1000.0) / 1000.0
+        g = 1.0#random.uniform(0.0, 1000.0) / 1000.0
+        b = 1.0#random.uniform(0.0, 1000.0) / 1000.0
         bpy.context.scene.world.node_tree.nodes["Background"].inputs[0].default_value = (r, g, b, 1.0)
 
-        create_bgr = random.randint(0, 1)
+        create_bgr = 1#random.randint(0, 1)
         if create_bgr == 1:
             name = 'BackgroundPlane'
             bgr_info = backgroundImgLst[random.randint(0, len(backgroundImgLst) - 1)]
@@ -309,11 +290,11 @@ class TrainScene:
         alpha_available = objInfo[2]
         white_background = objInfo[3]
 
-        if white_background:
-            train_scene.cleanup_scene()
-            train_scene.add_background_white();
-            train_scene.add_light()
-            train_scene.add_camera()
+        #if white_background == 1:
+        #    train_scene.cleanup_scene()
+        #    train_scene.add_background_white();
+        #    train_scene.add_light()
+        #    train_scene.add_camera()
 
         object = self._blender.add_plane(name, 1.0, (0.0, -0.01, 0.0), rotation=(math.radians(90), 0.0, 0.0), scale=(1.0, 1.7, 1.0))
         self._blender.add_material(object, self._img_path + img, alpha_available=alpha_available)
@@ -327,7 +308,7 @@ class TrainScene:
 
         # Convert to greyscale
         img = cv.imread(filename)
-        img = cv.cvtColor(img, cv.COLOR_BGR2GRAY)
+        #img = cv.cvtColor(img, cv.COLOR_BGR2GRAY)
         cv.imwrite(filename, img)
     
     def save_descriptor(self):
@@ -513,9 +494,13 @@ class TrainScene:
 if __name__ == "__main__":
     # Os get current path
     path = os.path.dirname(os.path.realpath(__file__))
+    print("======================================")
     print("Path: " + path)
+    print("Num clases: " + str(len(objectList)))
+    print("======================================")
 
-    numImages = 50
+
+    numImages = 1
 
     blender = BlenderHandler()
     
