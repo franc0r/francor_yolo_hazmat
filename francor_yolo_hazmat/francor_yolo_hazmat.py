@@ -4,21 +4,33 @@
 
 import torch
 import rclpy
+import os
 from rclpy.node import Node
 from cv_bridge import CvBridge
 from std_msgs.msg import String
 from sensor_msgs.msg import Image
 from std_srvs.srv import SetBool
 from threading import Lock
+from ament_index_python.packages import get_package_share_directory
 import cv2
+from rclpy.qos import qos_profile_sensor_data
+from sensor_msgs.msg import CompressedImage
+import numpy as np
 
 class ImageSubscriber(Node):
     def __init__(self):
         super().__init__('yolov5_node')
 
+        # Ros2 get package path
+        self.__package_path = os.path.abspath("")
+        self.__yolo_path = os.path.abspath("yolov5")
+        self.__model_path = os.path.abspath("yolov5/hazmat_yolov5s_200e.pt")
+
+        self.get_logger().info("Package path: " + self.__package_path)
+
         # declare pubsub routes
-        self.__img_subs = self.create_subscription(Image, '/image_raw', self.listener_callback, 1)
-        self.__img_pub = self.create_publisher(Image, '/yolov5/image', 10)
+        self.__img_subs = self.create_subscription(Image, '/camera/tele/image_raw', self.listener_callback, qos_profile=qos_profile_sensor_data)
+        self.__img_pub = self.create_publisher(CompressedImage, '/yolov5/image/compressed', qos_profile=qos_profile_sensor_data)
 
         # Create bool service callback
         self.__bool_srv = self.create_service(SetBool, '/hazmat_yolo/enable', self.bool_srv_callback)
@@ -28,9 +40,10 @@ class ImageSubscriber(Node):
         
         # declare tools
         self.__cv_br = CvBridge()
-        self.__model = torch.hub.load('/home/martin/Projekte/francor/HazmatWS/yolov5', 'custom', path='/home/martin/Projekte/francor/HazmatWS/yolov5/hazmat_yolov5s.pt', source='local') 
+        self.__model = torch.hub.load(self.__yolo_path, 'custom', path=self.__model_path, source='local') 
 
         # Image container
+        self.__cv_image_header = None
         self.__cv_image = None
         self.__cv_image_lock = Lock()
         self.__detection_enabled = False
@@ -57,6 +70,11 @@ class ImageSubscriber(Node):
             # Only if detection is enabled
             if self.__detection_enabled:
 
+                # Convert to greyscale
+                #self.__cv_image = cv2.cvtColor(self.__cv_image, cv2.COLOR_BGR2RGB)
+                self.__cv_image = cv2.cvtColor(self.__cv_image, cv2.COLOR_BGR2GRAY)
+                self.__cv_image = cv2.cvtColor(self.__cv_image, cv2.COLOR_GRAY2RGB)
+
                 # Run model
                 results = self.__model(self.__cv_image)
 
@@ -64,7 +82,7 @@ class ImageSubscriber(Node):
                 for detection in results.pandas().xyxy[0].itertuples():
                     confidence = detection.confidence
 
-                    if confidence < 0.85:
+                    if confidence < 0.6:
                         continue
                     
                     class_name = detection.name
@@ -90,13 +108,22 @@ class ImageSubscriber(Node):
                     # Draw text
                     cv2.putText(self.__cv_image, class_name, (p1[0], p1[1] + 10), cv2.FONT_HERSHEY_SIMPLEX, 0.3, (255, 0, 0), 1)
 
+                self.__cv_image = cv2.cvtColor(self.__cv_image, cv2.COLOR_RGB2BGR)
+
             # Loop through detection list
             for detection in detection_lst:
                 # Draw fonts on left corner of image
-                cv2.putText(self.__cv_image, detection[0], (10, 10 + 10 * detection_lst.index(detection)), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 0, 0), 2)
+                cv2.putText(self.__cv_image, detection[0], (10, 20 + 10 * detection_lst.index(detection)), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 0, 0), 1)
+
+            
+
+            msg = CompressedImage()
+            msg.header = self.__cv_image_header
+            msg.format = "jpeg"
+            msg.data = np.array(cv2.imencode('.jpeg', self.__cv_image)[1]).tostring()
 
             # Publish image
-            self.__img_pub.publish(self.__cv_br.cv2_to_imgmsg(self.__cv_image, encoding="rgb8"))
+            self.__img_pub.publish(msg)
 
 
     def listener_callback(self, data):
@@ -105,6 +132,7 @@ class ImageSubscriber(Node):
 
         # Copy image to self.__cv_image
         with self.__cv_image_lock:
+            self.__cv_image_header = data.header
             self.__cv_image = cv_image.copy()
 
 def main(args=None):
