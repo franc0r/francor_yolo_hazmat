@@ -134,22 +134,27 @@ class ImageSubscriber(Node):
                 if ratio > self.__obj_max_ratio or ratio < self.__obj_min_ratio:
                     self.get_logger().warn("[%s]: Invalid ratio: %.3f" % (class_name, ratio))
                     continue
+                
                 # Append to detection list
                 detection_lst.append((class_name, p1, p2))
 
                 # Draw rectangle
                 cv2.rectangle(self.__cv_image, p1, p2, (0, 0, 255), 2)
 
-                # Draw text
-                cv2.putText(self.__cv_image, class_name[4:], (p1[0], p1[1] + 20), cv2.FONT_HERSHEY_SIMPLEX, 0.3, (255, 0, 0), 1)
-
             # Sort list alphabetically
             detection_lst.sort(key=lambda tup: tup[0])
 
             # Loop through detection list
             for detection in detection_lst:
+                idx = detection_lst.index(detection)
+                p1 = detection[1]
+                p2 = detection[2]
+
+                # Draw text in rectangle
+                cv2.putText(self.__cv_image, str(idx), (p1[0], p1[1] + 35), cv2.FONT_HERSHEY_SIMPLEX, 1.0, (255, 0, 0), 2)
+
                 # Draw fonts on left corner of image
-                cv2.putText(self.__cv_image, detection[0][4:], (10, 40 + 30 * detection_lst.index(detection)), cv2.FONT_HERSHEY_SIMPLEX, 1.0, (255, 0, 0), 2)
+                cv2.putText(self.__cv_image, str(idx) + ': ' + detection[0][4:], (10, 80 + 30 * idx), cv2.FONT_HERSHEY_SIMPLEX, 1.0, (255, 0, 0), 2)
 
             # Change color format
             self.__cv_image = cv2.cvtColor(self.__cv_image, cv2.COLOR_RGB2BGR)
