@@ -7,50 +7,48 @@
 import cv2 as cv
 import os
 
-imgID    = 4
-filePath = '/home/martin/Projekte/francor/HazmatWS/francor_yolo_hazmat/blender/output/'
+imgID    = 1
+filePath = '/home/martin/Projekte/francor/ros2_ws/src/francor_yolo_hazmat/blender/output/'
 
 hazmatList = [
-    ("NON-FLAMMABLE GAS", "2.png"),
-    ("FLAMMABLE_LIQUID", "4.png"),
-    ("FLAMMABLE_SOLID_1", "5.png"),
-    ("OXIDIZER", "6.png"),
-    ("RADIOACTIVE_II", "7.png"),
-    ("CORROSIVE", "8.png"),
-    ("INHALATION_HAZARD_1", "9.png"),
-    ("INFECTIOUS_SUBSTANCE", "10.png"),
-    ("EXPLOSIVE_1", "11.png"),
-    ("COMBUSTIBLE_1", "12.png"),
-    ("DANGEROUS_WHEN_WET_1", "13.png"),
-    ("ORGANIC_PEROXIDE", "14.png"),
-    ("INHALATION_HAZARD_6", "35.png"),
-    ("TOXIC", "36.png"),
-    ("COMBUSTIBLE_2", "47.png"),
-    ("FLAMMABLE", "48.png"),
-    ("GASOLINE", "50.png"),
-    ("FISSILE", "58.png"),
-    ("RADIOACTIVE_I", "59.png"),
-    ("EXPLOSIVE_2", "97.png"),
-    ("EXPLOSIVE_3", "98.png"),
-    ("FLAMMABLE_SOLID_2", "100.png"),
-    ("DANGEROUS_WHEN_WET_2", "101.png"),
-    ("SPONTANEOUSLY_COMBUSTIBLE", "102.png"),
-    ("DANGEROUS_WHEN_WET_3", "103.png"),
-    ("EXPLOSIVE_4", "200.png"),
-    ("BLASTING_AGENTS", "201.png"),
-    ("FLAMMABLE_GAS", "202.png"),
-    ("NON-FLAMMABLE_GAS_2", "203.png"),
-    ("OXYGEN", "204.png"),
-    ("FUEL_OIL", "205.png"),
-    ("DANGEROUS_WHEN_WET_4", "206.png"),
-    ("FLAMMABLE_SOLID_3", "207.png"),
-    ("SPONTANEOUSLY_COMBUSTIBLE", "208.png"),
-    ("OXIDIZER_2", "209.png"),
-    ("ORGANIC_PEROXIDE_2", "210.png"),
-    ("IHALATION_HAZARD", "211.png"),
-    ("POISON", "212.png"),
-    ("RADIOACTIVE", "213.png"),
-    ("CORROSIVE", "214.png"),
+    ("SQR_THERML-C",                  "0.png",    0, 0, 0),
+    ("SQR_NON-FLAMMALBLE_GAS",        "1.png",    0, 0, 0),
+    ("SQR_FLAMMABLE_LIQUID",          "2.png",    0, 0, 0),
+    ("SQR_OXIDIZER",                  "3.png",    0, 0, 0),
+    ("SQR_INFECTIOUS_SUBSTANCE",      "4.png",    0, 0, 0),
+    ("SQR_ORGANIC_PEROXIDE",          "5.png",    0, 0, 0),
+    ("SQR_CORROSIVE",                 "6.png",    0, 0, 0),
+    ("SQR_EXPLOSIVE",                 "7.png",    0, 0, 0),
+    ("SQR_FLAMMABLE_SOLID",           "8.png",    0, 0, 0),
+    ("SQR_DANGEROUS_WHEN_WET",        "9.png",    0, 0, 0),
+    ("SQR_SPONTANEOUSLY_COMBUSTIBLE", "10.png",   0, 0, 0),
+    ("SQR_RADIOACTIVE_II",            "11.png",   0, 0, 0),
+    ("SQR_INHALATION_HAZARD",         "12.png",   0, 0, 0),
+    ("RHO_CORROSIVE",                 "100.png",  1, 0, 0),
+    ("RHO_RADIACTIVE",                "101.png",  1, 0, 0),         
+    ("RHO_POISON",                    "102.png",  1, 0, 0),
+    ("RHO_INHALATION_HAZARD",         "103.png",  1, 0, 0),
+    ("RHO_ORGANIC_PEROXIDE",          "104.png",  1, 0, 0),
+    ("RHO_OXIDIZER",                  "105.png",  1, 0, 0),
+    ("RHO_SPONTANEOUSLY_COMBUSTIBLE", "106.png",  1, 0, 0),
+    ("RHO_FLAMMABLE_SOLID",           "107.png",  1, 0, 0),
+    ("RHO_DANGEROUS_WHEN_WET",        "108.png",  1, 0, 0),
+    ("RHO_FUEL_OIL",                  "109.png",  1, 0, 0),
+    ("RHO_OXYGEN",                    "110.png",  1, 0, 0),
+    ("RHO_NON-FLAMMALBLE_GAS",        "111.png",  1, 0, 0),
+    ("RHO_FLAMMABLE_GAS",             "112.png",  1, 0, 0),
+    ("RHO_BLASTING_AGENT",            "113.png",  1, 0, 0),
+    ("RHO_EXPLOSIVE",                 "114.png",  1, 0, 0),
+    ("OBJ_DOOR_HANDLE",               "1000.png", 0, 1, 0),
+    ("OBJ_FIRE_EXTINGUISHER",         "1001.png", 0, 1, 0),
+    ("OBJ_FIRE_FUSE_BOX",             "1002.png", 0, 1, 0),
+    ("OBJ_GREEN_BARELL",              "1003.png", 0, 1, 0),
+    ("OBJ_GREEN_CROSS",               "1004.png", 0, 1, 0),
+    ("OBJ_WATER_HYDRANT",             "1005.png", 0, 1, 0),
+    ("OBJ_BLUE_BARREL",               "1006.png", 0, 1, 0),
+    ("OBJ_ELEVATOR_BUTTONS",          "1007.png", 0, 1, 0),
+    ("OBJ_VALVE",                     "1008.png", 0, 1, 0),
+    ("OBJ_FIRE",                      "1009.png", 0, 1, 0),
 ]
 
 # Filename
@@ -99,7 +97,7 @@ with open(filename + '.txt', 'r') as f:
         cv.rectangle(img, startPoint, endPoint, colors[idx], 2)
 
         # Draw text
-        cv.putText(img, hazmatName, txtPos, cv.FONT_HERSHEY_SIMPLEX, 0.3, (255, 255, 255), 1)
+        cv.putText(img, hazmatName, txtPos, cv.FONT_HERSHEY_SIMPLEX, 0.3, (0, 0, 0), 1)
 
 # Show image
 cv.imshow('image', img)

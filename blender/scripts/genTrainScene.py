@@ -63,9 +63,9 @@ objectList = [
 
 backgroundImgLst = [
     ("backgrounds/wood_texture_01.jpg", 12.0, 12.0, (0.0, 0.0)),
-    #("backgrounds/white.jpg", 2.0, 2.0, (0.0, 0.0)),
-    #("backgrounds/tablet_1.jpg", 5.5, 5.5,  (-1.3, 0.6)),
-    #("backgrounds/concrete01.jpg", 4.0, 20.0, (0.0, 0.0)),
+    ("backgrounds/white.jpg", 2.0, 2.0, (0.0, 0.0)),
+    ("backgrounds/tablet_1.jpg", 5.5, 5.5,  (-1.3, 0.6)),
+    ("backgrounds/concrete01.jpg", 4.0, 20.0, (0.0, 0.0)),
 ]
 
 
@@ -311,7 +311,7 @@ class TrainScene:
         #    train_scene.add_light()
         #    train_scene.add_camera()
 
-        object = self._blender.add_plane(name, 2.0, (0.0, -0.01, 0.0), rotation=(math.radians(90), 0.0, 0.0), scale=(scale_x, scale_y, 1.0))
+        object = self._blender.add_plane(name, 1.0, (0.0, -0.01, 0.0), rotation=(math.radians(90), 0.0, 0.0), scale=(scale_x, scale_y, 1.0))
         self._blender.add_material(object, self._img_path + img, alpha_available=alpha_available)
 
 
