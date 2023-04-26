@@ -18,10 +18,10 @@ def generate_launch_description():
                     "qos_sensor_data_on": 1,
                     "yolo_weights_file" : "2023-04-26-01-yolo5s-64e-objects.pt",
                     "object_mode"       : 1,
-                    'yolo_confidence'   : 0.85,
+                    'yolo_confidence'   : 0.6,
                     'obj_max_size'      : 0.5,
-                    'obj_min_ratio'     : 0.6,
-                    'obj_max_ratio'     : 1.4,
+                    'obj_min_ratio'     : 0.2,
+                    'obj_max_ratio'     : 1.8,
                 }
             ],
             arguments=['--ros-args', '--log-level', 'info']

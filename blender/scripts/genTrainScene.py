@@ -51,7 +51,7 @@ objectList = [
     ("RHO_EXPLOSIVE",                 "114.png",  1, 0, 0),
     ("OBJ_DOOR_HANDLE",               "1000.png", 0, 1, 0),
     ("OBJ_FIRE_EXTINGUISHER",         "1001.png", 0, 1, 0),
-    ("OBJ_FIRE_FUSE_BOX",             "1002.png", 0, 1, 0),
+    ("OBJ_FUSE_BOX",                  "1002.png", 0, 1, 0),
     ("OBJ_GREEN_BARELL",              "1003.png", 0, 1, 0),
     ("OBJ_GREEN_CROSS",               "1004.png", 0, 1, 0),
     ("OBJ_WATER_HYDRANT",             "1005.png", 0, 1, 0),

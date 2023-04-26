@@ -51,6 +51,19 @@ class ImageSubscriber(Node):
         self.__obj_min_ratio = self.get_parameter('obj_min_ratio').value
         self.__obj_max_ratio = self.get_parameter('obj_max_ratio').value
 
+        # Print used parameters
+        self.get_logger().info("Yolo-Path: %s" % (self.__yolo_path))
+        self.get_logger().info("Image-Subs-Topic: %s" % (self.__image_subs_topic))
+        self.get_logger().info("Image-Pub-Topic: %s" % (self.__image_pub_topic))
+        self.get_logger().info("QoS-Sensor-Data: %s" % str(self.__qos_sensor_data))
+        self.get_logger().info("Yolo-Weights-File: %s" % (self.__yolo_weights_file))
+        self.get_logger().info("Yolo-Confidence: %s" % str(self.__yolo_confidence))
+        self.get_logger().info("Yolo-Update-Rate: %s" % str(self.__yolo_update_rate_hz))
+        self.get_logger().info("Object Mode: %s" % str(self.__object_mode))
+        self.get_logger().info("Object Max Size: %s" % str(self.__obj_max_size))
+        self.get_logger().info("Object Min Ratio: %s" % str(self.__obj_min_ratio))
+        self.get_logger().info("Object Max Ratio: %s" % str(self.__obj_max_ratio))
+
         # Set paths
         self.__model_path = self.__package_path + '/data/' + self.__yolo_weights_file
 
@@ -74,6 +87,10 @@ class ImageSubscriber(Node):
         # declare tools
         self.__cv_br = CvBridge()
         self.__model = torch.hub.load(self.__yolo_path, 'custom', path=self.__model_path, source='local') 
+
+
+        # Print info
+        self.get_logger().info("Classes: %s" % (self.__model.names))
 
         # Image container
         self.__cv_image_header = None
@@ -101,7 +118,7 @@ class ImageSubscriber(Node):
                 if confidence < self.__yolo_confidence:
                     continue
                 
-                class_name = detection.name
+                class_name = detection.name[4:]
                 class_type = detection.name[0:3]
 
                 # Check mode
@@ -154,7 +171,7 @@ class ImageSubscriber(Node):
                 cv2.putText(self.__cv_image, str(idx), (p1[0], p1[1] + 35), cv2.FONT_HERSHEY_SIMPLEX, 1.0, (255, 0, 0), 2)
 
                 # Draw fonts on left corner of image
-                cv2.putText(self.__cv_image, str(idx) + ': ' + detection[0][4:], (10, 80 + 30 * idx), cv2.FONT_HERSHEY_SIMPLEX, 1.0, (255, 0, 0), 2)
+                cv2.putText(self.__cv_image, str(idx) + ': ' + detection[0], (10, 80 + 30 * idx), cv2.FONT_HERSHEY_SIMPLEX, 1.0, (255, 0, 0), 2)
 
             # Change color format
             self.__cv_image = cv2.cvtColor(self.__cv_image, cv2.COLOR_RGB2BGR)
