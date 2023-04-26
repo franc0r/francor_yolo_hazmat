@@ -167,12 +167,15 @@ class ImageSubscriber(Node):
             # Publish image
             self.__img_pub.publish(msg)
 
+            self.__cv_image = None
+
 
     def listener_callback(self, data):
         # Copy image to self.__cv_image
         with self.__cv_image_lock:
-            self.__cv_image_header = data.header
-            self.__cv_image = self.__cv_br.imgmsg_to_cv2(data, desired_encoding='rgb8').copy()
+            if self.__cv_image is None:
+                self.__cv_image_header = data.header
+                self.__cv_image = self.__cv_br.imgmsg_to_cv2(data, desired_encoding='rgb8').copy()
 
 def main(args=None):
     rclpy.init(args=args)

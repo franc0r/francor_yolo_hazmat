@@ -14,7 +14,7 @@ def generate_launch_description():
                 {
                     #"image_subs_topic"  : "/camera/tele/image_raw",
                     "image_subs_topic"  : "/image_raw",
-                    "image_pubs_topic"  : "/find_object_2d/img_hazmats",
+                    "image_pub_topic"   : "/find_object_2d/img_hazmats",
                     "qos_sensor_data_on": 1,
                     "yolo_weights_file" : "2023-04-25-02-yolo5s-128e.pt",
                     "object_mode"       : 0,
